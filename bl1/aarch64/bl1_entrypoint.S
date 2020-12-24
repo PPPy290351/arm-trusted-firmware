@@ -14,6 +14,8 @@
 	 * bl1_entrypoint() is the entry point into the trusted
 	 * firmware code when a cpu is released from warm or
 	 * cold reset.
+	// @WarmReset: Not power off, use software to control and reset. (send reset signal)
+	// @ColdReset: Power off, and checking hardware when power on. (WarmReset no checking)
 	 * -----------------------------------------------------
 	 */
 
