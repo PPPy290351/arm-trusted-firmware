@@ -77,7 +77,7 @@ void enable_mmu_svc_mon(unsigned int flags)
 	assert(IS_IN_SECURE());
 	assert((read_sctlr() & SCTLR_M_BIT) == 0U);
 
-	/* Set attributes in the right indices of the MAIR */
+	/* Set attributes in the right indices of the MAIR */ // @MAIR: Memory Attribute Indirection Registers
 	mair0 = MAIR0_ATTR_SET(ATTR_DEVICE, ATTR_DEVICE_INDEX);
 	mair0 |= MAIR0_ATTR_SET(ATTR_IWBWA_OWBWA_NTR,
 			ATTR_IWBWA_OWBWA_NTR_INDEX);
@@ -87,6 +87,8 @@ void enable_mmu_svc_mon(unsigned int flags)
 
 	/* Invalidate TLBs at the current exception level */
 	tlbiall();
+	//Key: I think here to disable TLB is for writing the translation table into memory instead of storing at TLB.
+	// @TLB: a memory cache to reduce memory access from user memory location, also is a part of chip's Memory Management Unit(MMU)
 
 	/*
 	 * Set TTBCR bits as well. Set TTBR0 table properties. Disable TTBR1.
@@ -120,7 +122,7 @@ void enable_mmu_svc_mon(unsigned int flags)
 	 */
 	dsbish();
 	isb();
-
+	// @SCTLR, System Control Register
 	sctlr = read_sctlr();
 	sctlr |= SCTLR_WXN_BIT | SCTLR_M_BIT;
 

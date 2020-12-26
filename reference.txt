@@ -1,0 +1,4 @@
+- MPIDR register , identify the core is single thread or multi-thread, for scheduling purpose
+- Snoop and DVM message, need slave supported. so SCR register to check the slave interface...
+
+

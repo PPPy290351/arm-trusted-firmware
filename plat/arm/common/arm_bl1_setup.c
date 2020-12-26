@@ -83,7 +83,7 @@ void arm_bl1_early_platform_setup(void)
 
 void bl1_early_platform_setup(void)
 {
-	arm_bl1_early_platform_setup();
+	arm_bl1_early_platform_setup(); // Key: Initializing Watchdog / Trusted SRAM 
 
 	/*
 	 * Initialize Interconnect for this cluster during cold boot.
@@ -93,7 +93,8 @@ void bl1_early_platform_setup(void)
 	/*
 	 * Enable Interconnect coherency for the primary CPU's cluster.
 	 */
-	plat_arm_interconnect_enter_coherency();
+	plat_arm_interconnect_enter_coherency(); // Key: SCR/SCU to config the master/slave problem and data cache.  >>>
+	// @Willix: because SCR could know the single core has mutil-thread or not... 
 }
 
 /******************************************************************************
@@ -125,7 +126,7 @@ void arm_bl1_plat_arch_setup(void)
 		{0}
 	};
 
-	setup_page_tables(bl_regions, plat_arm_get_mmap());
+	setup_page_tables(bl_regions, plat_arm_get_mmap()); // Key: mapping bl1 code and trusted ram to page table using TCR 
 #ifdef __aarch64__
 	enable_mmu_el3(0);
 #else
