@@ -1,4 +1,11 @@
 - MPIDR register , identify the core is single thread or multi-thread, for scheduling purpose
 - Snoop and DVM message, need slave supported. so SCR register to check the slave interface...
-
-
+- IO device functions will be mapping to a structure for later program use ....  (open / read / write / size / close ...)
+- IO deivice has limitation, so need to check if therer has space to allocate device drive.  ex:(if dev_count < MAX_IO_DEVICES)
+- platform initialization , setup for config image and auth...
+- if FW_Config loaded, then loading TB_FW_CONFIG... (maybe related HW_CONFIG...) , and then set the config to BL2 image desc entry_point parameter ... 
+- Get system counter frequency for later non-secure image use
+    > maybe want to calculate timer using multiplier and divider...
+    > 滴答聲在一秒鐘內經過1 MHz信號 > multiplier > value with increasing frequency
+    > system counter frequency > divider > value with decreasing frequency
+    > compare with both value to calculate the delay timer

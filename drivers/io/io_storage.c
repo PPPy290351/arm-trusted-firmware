@@ -178,7 +178,7 @@ int io_dev_init(uintptr_t dev_handle, const uintptr_t init_params)
 
 	/* Absence of registered function implies NOP here */
 	if (dev->funcs->dev_init != NULL) {
-		result = dev->funcs->dev_init(dev, init_params);
+		result = dev->funcs->dev_init(dev, init_params); // @If IMAGE_ID==0, then do the initializing
 	}
 
 	return result;

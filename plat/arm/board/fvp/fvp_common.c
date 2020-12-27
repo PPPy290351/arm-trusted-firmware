@@ -432,11 +432,11 @@ void fvp_timer_init(void)
 	sp804_timer_init(V2M_SP804_TIMER0_BASE,
 			SP804_TIMER_CLKMULT, SP804_TIMER_CLKDIV);
 #else
-	generic_delay_timer_init();
+	generic_delay_timer_init(); // Key: compare the timer from system frequency and defined frequency to calculate delay timer 
 
 	/* Enable System level generic timer */
-	mmio_write_32(ARM_SYS_CNTCTL_BASE + CNTCR_OFF,
-			CNTCR_FCREQ(0U) | CNTCR_EN);
+	mmio_write_32(ARM_SYS_CNTCTL_BASE + CNTCR_OFF, // @No shifting, at LSB of CNTCR(Counter Control Register), 
+			CNTCR_FCREQ(0U) | CNTCR_EN); //Key: value:1 -> The counter is enabled and is incrementing. 
 #endif /* USE_SP804_TIMER */
 }
 

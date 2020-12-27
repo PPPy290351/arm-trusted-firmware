@@ -153,10 +153,10 @@ void arm_bl1_platform_setup(void)
 	int err = -1;
 
 	/* Initialise the IO layer and register platform IO devices */
-	plat_arm_io_setup();
+	plat_arm_io_setup(); // Key: arm platform IO device function register. and if semi-hosting supported, register semi-hosting driver 
 
 	/* Check if we need FWU before further processing */
-	is_fwu_needed = plat_arm_bl1_fwu_needed();
+	is_fwu_needed = plat_arm_bl1_fwu_needed(); // @If ToC is exists, then no need to do the initializing. 
 	if (is_fwu_needed) {
 		ERROR("Skip platform setup as FWU detected\n");
 		return;
@@ -167,7 +167,8 @@ void arm_bl1_platform_setup(void)
 	set_config_info(ARM_FW_CONFIG_BASE, fw_config_max_size, FW_CONFIG_ID);
 
 	/* Fill the device tree information struct with the info from the config dtb */
-	err = fconf_load_config(FW_CONFIG_ID);
+	// Key: Load Auth Image - Config Image 
+	err = fconf_load_config(FW_CONFIG_ID); // @image id : FW_CONFIG_ID
 	if (err < 0) {
 		ERROR("Loading of FW_CONFIG failed %d\n", err);
 		plat_error_handler(err);
@@ -184,6 +185,15 @@ void arm_bl1_platform_setup(void)
 			ERROR("Parsing of FW_CONFIG failed %d\n", err);
 			plat_error_handler(err);
 		}
+
+		/* This patch adds TB_FW_CONFIG for FVP and allows FVP
+		to select the appropriate HW_CONFIG to include in the
+		fip. The HW_CONFIG for FVP is selected via `FVP_HW_CONFIG_DTS`
+		build option. The TB_FW_CONFIG specifies the load address of
+		HW_CONFIG to BL2. Since currently the load address is different
+		between AARCH32 and AARCH64, 2 separate TB_FW_CONFIGs are
+		maintained for the 2 modes. */
+
 		/* load TB_FW_CONFIG */
 		err = fconf_load_config(TB_FW_CONFIG_ID);
 		if (err < 0) {
@@ -196,9 +206,10 @@ void arm_bl1_platform_setup(void)
 	}
 
 	/* The BL2 ep_info arg0 is modified to point to FW_CONFIG */
-	desc = bl1_plat_get_image_desc(BL2_IMAGE_ID);
+	desc = bl1_plat_get_image_desc(BL2_IMAGE_ID); // @return BL2 image desc
 	assert(desc != NULL);
-	desc->ep_info.args.arg0 = fw_config_info->config_addr;
+	// @ep_info : entry_point_info_t
+	desc->ep_info.args.arg0 = fw_config_info->config_addr; //Key: It seems like pass the config_addr parameter to BL2 desc->entry_point_info 
 
 #if TRUSTED_BOARD_BOOT
 	/* Share the Mbed TLS heap info with other images */
@@ -213,7 +224,7 @@ void arm_bl1_platform_setup(void)
 	arm_configure_sys_timer();
 #endif
 #if (ARM_ARCH_MAJOR > 7) || defined(ARMV7_SUPPORTS_GENERIC_TIMER)
-	write_cntfrq_el0(plat_get_syscnt_freq2());
+	write_cntfrq_el0(plat_get_syscnt_freq2()); //Key: get the counter_base_frequency, one is from hw_config, another is from address of MMIO 
 #endif
 }
 

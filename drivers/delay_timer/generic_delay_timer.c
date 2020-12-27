@@ -26,7 +26,7 @@ static uint32_t get_timer_value(void)
 	 * by read_cntpct_el0() to simulate the down counter. The value is
 	 * clipped from 64 to 32 bits.
 	 */
-	return (uint32_t)(~read_cntpct_el0());
+	return (uint32_t)(~read_cntpct_el0()); // @cntpct : The CNTPCT_EL0 system register reports the current system count value
 }
 
 void generic_delay_timer_init_args(uint32_t mult, uint32_t div)
@@ -34,7 +34,8 @@ void generic_delay_timer_init_args(uint32_t mult, uint32_t div)
 	ops.get_timer_value	= get_timer_value;
 	ops.clk_mult		= mult;
 	ops.clk_div		= div;
-
+	// @I guess we have the verbose timers value and defined frequency, then we could compared with divider(system frequency) to multiplier(defined frequency) and timer_value
+	// @Example. timer:10000, mult:100, div:50. then origianl:10000/100=100, but system delay:10000/50=200; 200-100...
 	timer_init(&ops);
 
 	VERBOSE("Generic delay timer configured with mult=%u and div=%u\n",
@@ -46,10 +47,10 @@ void generic_delay_timer_init(void)
 	assert(is_armv7_gentimer_present());
 
 	/* Value in ticks */
-	unsigned int mult = MHZ_TICKS_PER_SEC;
+	unsigned int mult = MHZ_TICKS_PER_SEC; // @ticks in per second : 1MHZ
 
 	/* Value in ticks per second (Hz) */
-	unsigned int div  = plat_get_syscnt_freq2();
+	unsigned int div  = plat_get_syscnt_freq2(); // @get the frequency counter which is mean that how many clocks per second.
 
 	/* Reduce multiplier and divider by dividing them repeatedly by 10 */
 	while (((mult % 10U) == 0U) && ((div % 10U) == 0U)) {

@@ -14,8 +14,8 @@
  ******************************************************************************/
 void bl1_arch_setup(void)
 {
-	/* Set the next EL to be AArch64 */
-	write_scr_el3(read_scr_el3() | SCR_RW_BIT);
+	/* Set the next EL to be AArch64 */ // @SCR: Secure Configuration Register
+	write_scr_el3(read_scr_el3() | SCR_RW_BIT); // Key: if RW bit==1, next lower level is AArch64 
 }
 
 /*******************************************************************************

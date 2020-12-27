@@ -64,19 +64,19 @@ int arm_io_setup(void)
 {
 	int io_result;
 
-	io_result = register_io_dev_fip(&fip_dev_con);
+	io_result = register_io_dev_fip(&fip_dev_con); // Key: register the Firmware Image Package device driver "connection" 
 	if (io_result < 0) {
 		return io_result;
 	}
 
-	io_result = register_io_dev_memmap(&memmap_dev_con);
+	io_result = register_io_dev_memmap(&memmap_dev_con); // Key: register the device "functions" to memory mapping... (read/write/open...) 
 	if (io_result < 0) {
 		return io_result;
 	}
 
 	/* Open connections to devices and cache the handles */
 	io_result = io_dev_open(fip_dev_con, (uintptr_t)NULL,
-				&fip_dev_handle);
+				&fip_dev_handle); // @dev_con->dev_open(dev_spec, dev_info);  -> dev_info == fip_dev_handle
 	if (io_result < 0) {
 		return io_result;
 	}
@@ -132,6 +132,8 @@ int plat_get_image_source(unsigned int image_id, uintptr_t *dev_handle,
  * See if a Firmware Image Package is available,
  * by checking if TOC is valid or not.
  */
+// @TOC(table of contents): FIP layout consists of a table of contents
+//Key:  The ToC itself has a header followed by one or more table entries, All ToC entries describe some payload data that has been appended to the end of the binary package 
 bool arm_io_is_toc_valid(void)
 {
 	return (io_dev_init(fip_dev_handle, (uintptr_t)FIP_IMAGE_ID) == 0);

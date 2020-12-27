@@ -52,7 +52,7 @@ void bl1_platform_setup(void)
 	arm_bl1_platform_setup();
 
 	/* Initialize System level generic or SP804 timer */
-	fvp_timer_init();
+	fvp_timer_init(); //Key: delay timer initial and System level timer enable 
 
 	/* On FVP RevC, initialize SMMUv3 */
 	if ((arm_config.flags & ARM_CONFIG_FVP_HAS_SMMUV3) != 0U)

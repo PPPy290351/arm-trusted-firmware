@@ -119,6 +119,7 @@ void bl1_main(void)
 #endif /* ENABLE_ASSERTIONS */
 
 	/* Perform remaining generic architectural setup from EL3 */
+	// @EL3
 	bl1_arch_setup();
 
 #if TRUSTED_BOARD_BOOT

@@ -120,12 +120,13 @@ void plat_arm_io_setup(void)
 {
 	int io_result;
 
-	io_result = arm_io_setup();
+	io_result = arm_io_setup(); // @connection / functions
 	if (io_result < 0) {
 		panic();
 	}
 
 	/* Register the additional IO devices on this platform */
+	// @FVP : Fixed Virtual Platforms, so need the semi-hosting driver
 	io_result = register_io_dev_sh(&sh_dev_con);
 	if (io_result < 0) {
 		panic();

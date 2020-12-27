@@ -87,7 +87,7 @@ unsigned int plat_get_syscnt_freq2(void)
 
 #if !RESET_TO_BL31 && !BL2_AT_EL3
 	/* Get the frequency through FCONF API for HW_CONFIG */
-	counter_base_frequency = FCONF_GET_PROPERTY(hw_config, cpu_timer, clock_freq);
+	counter_base_frequency = FCONF_GET_PROPERTY(hw_config, cpu_timer, clock_freq); // @I guess clock_frq is mean how many times are clock in?
 	if (counter_base_frequency > 0U) {
 		return counter_base_frequency;
 	}
