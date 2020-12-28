@@ -67,19 +67,20 @@ void bl1_prepare_next_image(unsigned int image_id)
 	next_bl_ep = &desc->ep_info;
 
 	/* Get the image security state. */
-	security_state = GET_SECURITY_STATE(next_bl_ep->h.attr);
+	security_state = GET_SECURITY_STATE(next_bl_ep->h.attr); //Key: mask the security bit to identify state is secure or non-secure 
 
 	/* Setup the Secure/Non-Secure context if not done already. */
 	if (cm_get_context(security_state) == NULL)
 		cm_set_context(&bl1_cpu_context[security_state], security_state);
 
-	/* Prepare the SPSR for the next BL image. */
+	/* Prepare the SPSR for the next BL image. */ // @SPSR: Saved Program Status Registers
 	if ((security_state != SECURE) && (el_implemented(2) != EL_IMPL_NONE)) {
 		mode = MODE_EL2;
 	}
 
 	next_bl_ep->spsr = (uint32_t)SPSR_64((uint64_t) mode,
-		(uint64_t)MODE_SP_ELX, DISABLE_ALL_EXCEPTIONS);
+		(uint64_t)MODE_SP_ELX, DISABLE_ALL_EXCEPTIONS);  // Key: (mode+sp+daif) + (sbss disabled) 
+		// @sbss:0, Hardware is not permitted to load or store speculatively, in a manner that could practically give rise to a cache timing side channel,
 
 	/* Allow platform to make change */
 	bl1_plat_set_ep_info(image_id, next_bl_ep);

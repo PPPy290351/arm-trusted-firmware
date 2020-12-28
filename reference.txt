@@ -9,3 +9,5 @@
     > 滴答聲在一秒鐘內經過1 MHz信號 > multiplier > value with increasing frequency
     > system counter frequency > divider > value with decreasing frequency
     > compare with both value to calculate the delay timer
+- ARM CPU from secure to non-secure, switch the pointer to the corresponding *context structure, then switched.
+- set sbss register to 0, then Hardware is not permitted to load or store speculatively... otherwise will give rise to a cache timing  side channel attack

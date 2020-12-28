@@ -85,7 +85,7 @@ typedef struct aapcs32_params {
  * This structure represents the superset of information needed while
  * switching exception levels. The only two mechanisms to do so are
  * ERET & SMC. Security state is indicated using bit zero of header
- * attribute
+ * attribute // @NS-bit 0 : secure....?
  * NOTE: BL1 expects entrypoint followed by spsr at an offset from the start
  * of this structure defined by the macro `ENTRY_POINT_INFO_PC_OFFSET` while
  * processing SMC to jump to BL31.
