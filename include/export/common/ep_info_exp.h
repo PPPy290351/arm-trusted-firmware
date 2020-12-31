@@ -89,6 +89,7 @@ typedef struct aapcs32_params {
  * NOTE: BL1 expects entrypoint followed by spsr at an offset from the start
  * of this structure defined by the macro `ENTRY_POINT_INFO_PC_OFFSET` while
  * processing SMC to jump to BL31.
+ * // @AAPCS : Arm Architecture Procedure Call Standard
  *****************************************************************************/
 typedef struct entry_point_info {
 	param_header_t h;

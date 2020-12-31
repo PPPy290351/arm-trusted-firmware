@@ -72,6 +72,8 @@ void bl1_prepare_next_image(unsigned int image_id)
 	/* Setup the Secure/Non-Secure context if not done already. */
 	if (cm_get_context(security_state) == NULL)
 		cm_set_context(&bl1_cpu_context[security_state], security_state);
+		// @bl1_cpu_context_ptr will be set with "bl1_cpu_context[security_state]" & "security_state"
+
 
 	/* Prepare the SPSR for the next BL image. */ // @SPSR: Saved Program Status Registers
 	if ((security_state != SECURE) && (el_implemented(2) != EL_IMPL_NONE)) {
@@ -81,12 +83,14 @@ void bl1_prepare_next_image(unsigned int image_id)
 	next_bl_ep->spsr = (uint32_t)SPSR_64((uint64_t) mode,
 		(uint64_t)MODE_SP_ELX, DISABLE_ALL_EXCEPTIONS);  // Key: (mode+sp+daif) + (sbss disabled) 
 		// @sbss:0, Hardware is not permitted to load or store speculatively, in a manner that could practically give rise to a cache timing side channel,
+		// @I guess ... preparing switch to next BL, all exceptions need to disable.?
 
 	/* Allow platform to make change */
 	bl1_plat_set_ep_info(image_id, next_bl_ep);
 
 	/* Prepare the context for the next BL image. */
-	cm_init_my_context(next_bl_ep);
+	cm_init_my_context(next_bl_ep); // Key: new a context of next_BL with next_BL_EP.attr security state 
+	
 	cm_prepare_el3_exit(security_state);
 
 	/* Indicate that image is in execution state. */

@@ -360,19 +360,19 @@ void cm_init_my_context(const entry_point_info_t *ep)
 }
 
 /*******************************************************************************
- * Prepare the CPU system registers for first entry into secure or normal world
+ * // @Prepare the CPU system registers for first entry into secure or normal world
  *
- * If execution is requested to EL2 or hyp mode, SCTLR_EL2 is initialized
+ * If execution is requested to EL2 or hyp mode, SCTLR_EL2 is initialized // @SCTLR_EL2: System Control Register (EL2)
  * If execution is requested to non-secure EL1 or svc mode, and the CPU supports
- * EL2 then EL2 is disabled by configuring all necessary EL2 registers.
+ * EL2 then **EL2 is disabled by configuring all necessary EL2 registers.** // @that means disable EL2 when request to non-secure EL1...
  * For all entries, the EL1 registers are initialized from the cpu_context
  ******************************************************************************/
-void cm_prepare_el3_exit(uint32_t security_state)
+void cm_prepare_el3_exit(uint32_t security_state) //@security_state is from next_BL_image desc
 {
-	u_register_t sctlr_elx, scr_el3, mdcr_el2;
-	cpu_context_t *ctx = cm_get_context(security_state);
+	u_register_t sctlr_elx, scr_el3, mdcr_el2; //@scr:secure configuration, mdcr: Controls the trapping to Hyp mode of Non-secure accesses
+	cpu_context_t *ctx = cm_get_context(security_state); //Key: get the context which is prepared from bl1_context_mgmt.c 
 	bool el2_unused = false;
-	uint64_t hcr_el2 = 0U;
+	uint64_t hcr_el2 = 0U; //@hcr: hypervisor configuration register
 
 	assert(ctx != NULL);
 
