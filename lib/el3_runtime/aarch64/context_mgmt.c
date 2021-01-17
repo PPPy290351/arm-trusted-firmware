@@ -372,11 +372,13 @@ void cm_prepare_el3_exit(uint32_t security_state) //@security_state is from next
 	u_register_t sctlr_elx, scr_el3, mdcr_el2; //@scr:secure configuration, mdcr: Controls the trapping to Hyp mode of Non-secure accesses
 	cpu_context_t *ctx = cm_get_context(security_state); //Key: get the context which is prepared from bl1_context_mgmt.c 
 	bool el2_unused = false;
-	uint64_t hcr_el2 = 0U; //@hcr: hypervisor configuration register
+	uint64_t hcr_el2 = 0U; //@hcr: hypervisor configuration register - Provides configuration controls for virtualization
 
 	assert(ctx != NULL);
 
-	if (security_state == NON_SECURE) {
+	//TODO: I think this section is for EL3 setup, so I skip this section... I need to check back again when I found the FWU
+	
+	if (security_state == NON_SECURE) { //@I guess this step will go to NS_BL1U
 		scr_el3 = read_ctx_reg(get_el3state_ctx(ctx),
 						 CTX_SCR_EL3);
 		if ((scr_el3 & SCR_HCE_BIT) != 0U) {

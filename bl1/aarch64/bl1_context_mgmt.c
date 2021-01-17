@@ -91,7 +91,7 @@ void bl1_prepare_next_image(unsigned int image_id)
 	/* Prepare the context for the next BL image. */
 	cm_init_my_context(next_bl_ep); // Key: new a context of next_BL with next_BL_EP.attr security state 
 	
-	cm_prepare_el3_exit(security_state);
+	cm_prepare_el3_exit(security_state); // @ I guess : register setup, context switching to next executing state
 
 	/* Indicate that image is in execution state. */
 	desc->state = IMAGE_STATE_EXECUTED;

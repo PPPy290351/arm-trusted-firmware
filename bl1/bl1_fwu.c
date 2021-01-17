@@ -113,6 +113,8 @@ static unsigned int bl1_fwu_loaded_ids[FWU_MAX_SIMULTANEOUS_IMAGES] = {
 	[0 ... FWU_MAX_SIMULTANEOUS_IMAGES-1] = INVALID_IMAGE_ID
 };
 
+//Key:  add or remove image id, need to check is there any space in array, default value in array is :INVALID_IMAGE_ID, add new one with "image_id", remove the one with "INVALID_IMAGE_ID"
+
 /*
  * Adds an image_id to the bl1_fwu_loaded_ids array.
  * Returns 0 on success, 1 on error.
